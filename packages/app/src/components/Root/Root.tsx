@@ -27,6 +27,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import { MyGroupsSidebarItem } from '@backstage/plugin-org';
 import GroupIcon from '@material-ui/icons/People';
+import { FluxIcon } from '@weaveworksoss/backstage-plugin-flux';
 
 const useSidebarLogoStyles = makeStyles({
   root: {
@@ -79,6 +80,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         <SidebarDivider />
         <SidebarScrollWrapper>
           {/* Items in this group will be scrollable if they run out of space */}
+          <SidebarItem icon={FluxIcon} to="flux-runtime" text="Flux Runtime" />
         </SidebarScrollWrapper>
       </SidebarGroup>
       <SidebarSpace />

@@ -35,6 +35,7 @@ import { AppRouter, FlatRoutes } from '@backstage/core-app-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
+import { FluxRuntimePage } from '@weaveworksoss/backstage-plugin-flux';
 
 const app = createApp({
   apis,
@@ -94,6 +95,7 @@ const routes = (
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
+    <Route path="/flux-runtime" element={<FluxRuntimePage />} />
   </FlatRoutes>
 );
 
