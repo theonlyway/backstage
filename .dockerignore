@@ -6,3 +6,11 @@ packages/*/src
 packages/*/node_modules
 plugins
 *.local.yaml
+
+dist-types
+node_modules
+packages/*/dist
+packages/*/node_modules
+plugins/*/dist
+plugins/*/node_modules
+*.local.yaml
