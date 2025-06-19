@@ -32,7 +32,7 @@ CONTAINER_TOOL ?= docker
 PLATFORMS ?= linux/arm64,linux/amd64
 .PHONY: docker-build
 ## Build the Backstage Docker image using buildx and cache
-docker-build: build-backend
+docker-build:
 	# copy existing Dockerfile and insert --platform=${BUILDPLATFORM} into Dockerfile.cross, and preserve the original Dockerfile
 	sed -e '1 s/\(^FROM\)/FROM --platform=\$$\{BUILDPLATFORM\}/; t' -e ' 1,// s//FROM --platform=\$$\{BUILDPLATFORM\}/' $(DOCKERFILE) > Dockerfile.cross
 	- $(CONTAINER_TOOL) buildx create --name builder
