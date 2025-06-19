@@ -1,4 +1,4 @@
-name: Build and Push Recycler Operator image
+name: Build and Push Backstage
 
 on:
   workflow_dispatch:
