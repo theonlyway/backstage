@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.3] - 2025-06-19
+### :bug: Bug Fixes
+- [`b1113d0`](https://github.com/theonlyway/backstage/commit/b1113d0c1c9bbd5a3fef05bb3bb20be873687187) - wrong platform *(commit by [@theonlyway](https://github.com/theonlyway))*
+
+
 ## [0.0.2] - 2025-06-19
 ### :bug: Bug Fixes
 - [`8d57655`](https://github.com/theonlyway/backstage/commit/8d57655be362e95d539bdde184d6ae5cb1a60526) - updated makefile *(commit by [@theonlyway](https://github.com/theonlyway))*
@@ -22,3 +27,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [0.0.1]: https://github.com/theonlyway/backstage/compare/0.0.0...0.0.1
 [0.0.2]: https://github.com/theonlyway/backstage/compare/0.0.1...0.0.2
+[0.0.3]: https://github.com/theonlyway/backstage/compare/0.0.2...0.0.3
