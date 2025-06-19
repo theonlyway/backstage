@@ -65,11 +65,12 @@ jobs:
       run: |
         FULL_IMAGE=${{ env.GHCR_REGISTRY }}/${{ env.REPOSITORY_OWNER }}/${{ env.IMAGE_NAME }}
         CACHE_PATH=${{ env.GHCR_REGISTRY }}/${{ env.REPOSITORY_OWNER }}/cache
-        DOCKER_BUILDKIT=1 docker build \
+        docker buildx build \
         --cache-from=type=local,src=${CACHE_PATH} \
         --cache-to=type=local,dest=${CACHE_PATH},mode=max,ttl=720h \
         -t ${FULL_IMAGE}:${{ needs.semver.outputs.next_version }} \
-        -f packages/backend/Dockerfile .
+        -f packages/backend/Dockerfile \
+        --push .
 
   release:
     needs: [semver, build-ghcr]
