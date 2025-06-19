@@ -32,12 +32,12 @@ CONTAINER_TOOL ?= docker
 PLATFORMS ?= linux/arm64,linux/amd64
 .PHONY: docker-build
 ## Build the Backstage Docker image using buildx and cache
-docker-build:
+docker-build: build-backend
 	# copy existing Dockerfile and insert --platform=${BUILDPLATFORM} into Dockerfile.cross, and preserve the original Dockerfile
 	sed -e '1 s/\(^FROM\)/FROM --platform=\$$\{BUILDPLATFORM\}/; t' -e ' 1,// s//FROM --platform=\$$\{BUILDPLATFORM\}/' $(DOCKERFILE) > Dockerfile.cross
 	- $(CONTAINER_TOOL) buildx create --name builder
 	$(CONTAINER_TOOL) buildx use builder
-	- $(CONTAINER_TOOL) buildx build --push \
+	$(CONTAINER_TOOL) buildx build --push \
 		--platform=$(PLATFORMS) \
 		--cache-from=type=registry,ref=$(CACHE_PATH):cache \
 		--cache-to=type=registry,ref=$(CACHE_PATH):cache,mode=max,ttl=$(CACHE_TTL) \
@@ -46,6 +46,13 @@ docker-build:
 		-f Dockerfile.cross $(CONTEXT)
 	- $(CONTAINER_TOOL) buildx rm builder
 	rm Dockerfile.cross
+
+.PHONY: build-backend
+## Build the backend and create required tarballs for Docker image
+build-backend:
+	yarn install --immutable
+	yarn tsc
+	yarn build:backend
 
 .PHONY: help
 help: ## Show this help.
