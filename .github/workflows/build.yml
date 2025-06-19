@@ -39,6 +39,7 @@ jobs:
         patchAll: true
         majorList: "breaking,major"
         fallbackTag: "0.0.0"
+        noVersionBumpBehavior: "patch"
 
   build-ghcr:
     needs: [semver]
