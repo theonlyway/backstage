@@ -1,6 +1,8 @@
 # This dockerfile builds an image for the backend package.
 # It should be executed with the root of the repo as docker context.
 #
+# docker build -t backstage/backend:latest -f packages/backend/Dockerfile .
+#
 # Before building this image, be sure to have run the following commands in the repo root:
 #
 # yarn install --immutable
