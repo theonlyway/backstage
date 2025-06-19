@@ -12,8 +12,7 @@ on:
 
 env:
   GHCR_REGISTRY: ghcr.io
-  DOCKERHUB_OWNER: theonlywaye
-  IMAGE_NAME: recycler
+  IMAGE_NAME: backstage
 
 jobs:
   semver:
@@ -50,14 +49,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up Go
-      uses: actions/setup-go@v5
-      with:
-        go-version-file: 'go.mod'
-
-    - name: Install Operator SDK
-      run: make operator-sdk
-
     - name: Set Environment Variables
       run: echo "REPOSITORY_OWNER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
@@ -72,39 +63,14 @@ jobs:
       run: |
         FULL_IMAGE=${{ env.GHCR_REGISTRY }}/${{ env.REPOSITORY_OWNER }}/${{ env.IMAGE_NAME }}
         CACHE_PATH=${{ env.GHCR_REGISTRY }}/${{ env.REPOSITORY_OWNER }}/cache
-        make docker-buildx IMG=${FULL_IMAGE}:${{ needs.semver.outputs.next_version }} VERSION=${{ needs.semver.outputs.next_version }} CACHE_PATH=${CACHE_PATH}
-
-  build-dockerhub:
-    needs: [semver]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      packages: write
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Set up Go
-      uses: actions/setup-go@v5
-      with:
-        go-version-file: 'go.mod'
-
-    - name: Install Operator SDK
-      run: make operator-sdk
-
-    - name: Login to Dockerhub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ vars.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-    - name: Build and Push Operator to Docker Hub
-      run: |
-        FULL_IMAGE=${{ env.DOCKERHUB_OWNER }}/${{ env.IMAGE_NAME }}
-        make docker-buildx IMAGE_TAG_BASE=${FULL_IMAGE} IMG=${FULL_IMAGE}:${{ needs.semver.outputs.next_version }} VERSION=${{ needs.semver.outputs.next_version }} CACHE_PATH=${FULL_IMAGE}
+        DOCKER_BUILDKIT=1 docker build \
+        --cache-from=type=local,src=${CACHE_PATH} \
+        --cache-to=type=local,dest=${CACHE_PATH},mode=max,ttl=720h \
+        -t ${FULL_IMAGE}:${{ needs.semver.outputs.next_version }} \
+        -f packages/backend/Dockerfile .
 
   release:
-    needs: [semver, build-ghcr, build-dockerhub]
+    needs: [semver, build-ghcr]
     runs-on: ubuntu-latest
     permissions:
       contents: write
