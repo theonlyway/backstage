@@ -29,7 +29,7 @@ CONTAINER_TOOL ?= docker
 # - be able to push the image to your registry (i.e. if you do not set a valid value via IMG=<myregistry/image:<tag>> then the export will fail)
 # To adequately provide solutions that are compatible with multiple platforms, you should consider using this option.
 #PLATFORMS ?= linux/arm64,linux/amd64,linux/s390x,linux/ppc64le
-PLATFORMS ?= linux/arm64
+PLATFORMS ?= linux/amd64
 .PHONY: docker-build
 ## Build the Backstage Docker image using buildx and cache
 docker-build:
