@@ -38,6 +38,7 @@ jobs:
         branch: ${{ github.head_ref || github.ref_name }}
         patchAll: true
         majorList: "breaking,major"
+        fallbackTag: "0.0.0"
 
   build-ghcr:
     needs: [semver]
