@@ -86,7 +86,7 @@ COPY --from=build --chown=node:node /app/packages/backend/dist/bundle/ ./
 COPY --chown=node:node app-config*.yaml ./
 
 # This will include the examples, if you don't need these simply remove this line
-COPY --chown=node:node examples ./examples
+# COPY --chown=node:node examples ./examples
 
 # This switches many Node.js dependencies to production mode.
 ENV NODE_ENV=production

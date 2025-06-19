@@ -10,10 +10,10 @@ IMAGE_NAME ?= backstage
 DOCKERFILE ?= Dockerfile
 # Path to context (adjust if needed)
 CONTEXT ?= .
-# Cache path for buildx
-CACHE_PATH ?= $(REGISTRY)/$(REPOSITORY_OWNER)/cache
 # Full image name
 FULL_IMAGE ?= $(REGISTRY)/$(REPOSITORY_OWNER)/$(IMAGE_NAME)
+# Cache path for buildx
+CACHE_PATH ?= $(FULL_IMAGE)/cache
 # CACHE_TTL defines the time-to-live for cache layers in the registry.
 # Default is 30 days. You can override this by setting CACHE_TTL (e.g., make CACHE_TTL=7d docker-build).
 CACHE_TTL ?= 90d
@@ -29,7 +29,7 @@ CONTAINER_TOOL ?= docker
 # - be able to push the image to your registry (i.e. if you do not set a valid value via IMG=<myregistry/image:<tag>> then the export will fail)
 # To adequately provide solutions that are compatible with multiple platforms, you should consider using this option.
 #PLATFORMS ?= linux/arm64,linux/amd64,linux/s390x,linux/ppc64le
-PLATFORMS ?= linux/arm64,linux/amd64
+PLATFORMS ?= linux/arm64
 .PHONY: docker-build
 ## Build the Backstage Docker image using buildx and cache
 docker-build:
