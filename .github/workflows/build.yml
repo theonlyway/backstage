@@ -1,0 +1,197 @@
+name: Build and Push Recycler Operator image
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+    branches:
+        - main
+  release:
+    types: [published]
+
+env:
+  GHCR_REGISTRY: ghcr.io
+  DOCKERHUB_OWNER: theonlywaye
+  IMAGE_NAME: recycler
+
+jobs:
+  semver:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+      attestations: write
+      id-token: write
+    outputs:
+      current_version: ${{ steps.semver.outputs.current }}
+      next_version: ${{ steps.semver.outputs.nextStrict }}
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Get Next Version
+      id: semver
+      uses: ietf-tools/semver-action@v1
+      with:
+        token: ${{ github.token }}
+        branch: ${{ github.head_ref || github.ref_name }}
+        patchAll: true
+        majorList: "breaking,major"
+
+  build-ghcr:
+    needs: [semver]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: 'go.mod'
+
+    - name: Install Operator SDK
+      run: make operator-sdk
+
+    - name: Set Environment Variables
+      run: echo "REPOSITORY_OWNER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+    - name: Login to GHCR
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.GHCR_REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ github.token }}
+
+    - name: Build and Push Operator to GHCR
+      run: |
+        FULL_IMAGE=${{ env.GHCR_REGISTRY }}/${{ env.REPOSITORY_OWNER }}/${{ env.IMAGE_NAME }}
+        CACHE_PATH=${{ env.GHCR_REGISTRY }}/${{ env.REPOSITORY_OWNER }}/cache
+        make docker-buildx IMG=${FULL_IMAGE}:${{ needs.semver.outputs.next_version }} VERSION=${{ needs.semver.outputs.next_version }} CACHE_PATH=${CACHE_PATH}
+
+  build-dockerhub:
+    needs: [semver]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: 'go.mod'
+
+    - name: Install Operator SDK
+      run: make operator-sdk
+
+    - name: Login to Dockerhub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ vars.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Build and Push Operator to Docker Hub
+      run: |
+        FULL_IMAGE=${{ env.DOCKERHUB_OWNER }}/${{ env.IMAGE_NAME }}
+        make docker-buildx IMAGE_TAG_BASE=${FULL_IMAGE} IMG=${FULL_IMAGE}:${{ needs.semver.outputs.next_version }} VERSION=${{ needs.semver.outputs.next_version }} CACHE_PATH=${FULL_IMAGE}
+
+  release:
+    needs: [semver, build-ghcr, build-dockerhub]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        ref: main
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
+      id: release
+      with:
+        draft: false
+        prerelease: false # Ensure the release is marked as published
+        make_latest: true
+        name: ${{ needs.semver.outputs.next_version }}
+        tag_name: ${{ needs.semver.outputs.next_version }}
+
+    - name: Trigger Changelog Workflow
+      run: |
+        curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        -H "Accept: application/vnd.github.v3+json" \
+        https://api.github.com/repos/${{ github.repository }}/dispatches \
+        -d '{"event_type":"update_changelog","client_payload":{"tag_name":"${{ needs.semver.outputs.next_version }}"}}'
+
+  cleanup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    if: failure()
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.GHCR_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: Check and Delete Docker Image from GHCR
+        run: |
+          FULL_IMAGE=${{ env.GHCR_REGISTRY }}/${{ env.REPOSITORY_OWNER }}/${{ env.IMAGE_NAME }}
+          IMAGE="${FULL_IMAGE}:${{ needs.semver.outputs.next_version }}"
+          if docker manifest inspect $IMAGE > /dev/null 2>&1; then
+            echo "Docker image $IMAGE exists in GHCR. Deleting..."
+            curl -X DELETE -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              "${{ env.GHCR_REGISTRY }}/v2/${{ env.REPOSITORY_OWNER }}/${{ env.IMAGE_NAME }}/manifests/${{ needs.semver.outputs.next_version }}"
+          else
+            echo "Docker image $IMAGE does not exist in GHCR. Skipping deletion."
+          fi
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Check and Delete Docker Image from Docker Hub
+        run: |
+          FULL_IMAGE=${{ env.DOCKERHUB_OWNER }}/${{ env.IMAGE_NAME }}
+          IMAGE="${FULL_IMAGE}:${{ needs.semver.outputs.next_version }}"
+          if docker manifest inspect $IMAGE > /dev/null 2>&1; then
+            echo "Docker image $IMAGE exists in Docker Hub. Deleting..."
+            curl -X DELETE -u "${{ vars.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" \
+              "https://hub.docker.com/v2/repositories/${{ env.DOCKERHUB_OWNER }}/${{ env.IMAGE_NAME }}/tags/${{ needs.semver.outputs.next_version }}/"
+          else
+            echo "Docker image $IMAGE does not exist in Docker Hub. Skipping deletion."
+          fi
+
+      - uses: ClementTsang/delete-tag-and-release@v0.3.1
+        with:
+          delete_release: true # default: false
+          tag_name: v${{ needs.semver.outputs.next_version }} # tag name to delete
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Reset Branch to Initial Commit
+        run: |
+          git fetch origin
+          git reset --hard ${{ github.sha }}
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git push --force origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

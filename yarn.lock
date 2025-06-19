@@ -3861,6 +3861,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@backstage/plugin-auth-backend-module-microsoft-provider@npm:^0.3.4":
+  version: 0.3.4
+  resolution: "@backstage/plugin-auth-backend-module-microsoft-provider@npm:0.3.4"
+  dependencies:
+    "@backstage/backend-plugin-api": "npm:^1.4.0"
+    "@backstage/plugin-auth-node": "npm:^0.6.4"
+    express: "npm:^4.18.2"
+    jose: "npm:^5.0.0"
+    passport-microsoft: "npm:^1.0.0"
+    zod: "npm:^3.22.4"
+  checksum: 10c0/4c1bf6a094fb72a2bbdd0db7091382983864f075ef793cc42f0547bd3ec7393dad959bb3a60eb85c75f4ea3f9cf1a45c2721819635c05d0b620166e3214e375f
+  languageName: node
+  linkType: hard
+
 "@backstage/plugin-auth-backend@npm:^0.25.1":
   version: 0.25.1
   resolution: "@backstage/plugin-auth-backend@npm:0.25.1"
@@ -16304,6 +16318,7 @@ __metadata:
     "@backstage/plugin-auth-backend": "npm:^0.25.1"
     "@backstage/plugin-auth-backend-module-github-provider": "npm:^0.3.4"
     "@backstage/plugin-auth-backend-module-guest-provider": "npm:^0.2.9"
+    "@backstage/plugin-auth-backend-module-microsoft-provider": "npm:^0.3.4"
     "@backstage/plugin-auth-node": "npm:^0.6.4"
     "@backstage/plugin-catalog-backend": "npm:^2.1.0"
     "@backstage/plugin-catalog-backend-module-logs": "npm:^0.1.11"
@@ -20326,7 +20341,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"express@npm:^4.14.0, express@npm:^4.17.1, express@npm:^4.21.2":
+"express@npm:^4.14.0, express@npm:^4.17.1, express@npm:^4.18.2, express@npm:^4.21.2":
   version: 4.21.2
   resolution: "express@npm:4.21.2"
   dependencies:
@@ -27615,7 +27630,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"passport-oauth2@npm:1.x.x, passport-oauth2@npm:^1.7.0":
+"passport-microsoft@npm:^1.0.0":
+  version: 1.1.0
+  resolution: "passport-microsoft@npm:1.1.0"
+  dependencies:
+    passport-oauth2: "npm:1.8.0"
+  checksum: 10c0/e3e04746a64996e90c0f94fdbc974b6459dfe174ad5132e3f4a7db720fe57d0e17cb36e50ae0856f6c6fc0d1a76389c42656edf89b943eee3c251824c2df3811
+  languageName: node
+  linkType: hard
+
+"passport-oauth2@npm:1.8.0, passport-oauth2@npm:1.x.x, passport-oauth2@npm:^1.7.0":
   version: 1.8.0
   resolution: "passport-oauth2@npm:1.8.0"
   dependencies:

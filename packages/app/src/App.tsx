@@ -30,6 +30,11 @@ import {
   OAuthRequestDialog,
   SignInPage,
 } from '@backstage/core-components';
+import {
+  configApiRef,
+  microsoftAuthApiRef,
+  useApi,
+} from '@backstage/core-plugin-api';
 import { createApp } from '@backstage/app-defaults';
 import { AppRouter, FlatRoutes } from '@backstage/core-app-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
@@ -57,7 +62,38 @@ const app = createApp({
     });
   },
   components: {
-    SignInPage: props => <SignInPage {...props} auto providers={['guest']} />,
+    SignInPage: props => {
+      const configApi = useApi(configApiRef);
+      if (configApi.getString('auth.environment') === 'development') {
+        return (
+          <SignInPage
+            {...props}
+            auto
+            providers={[
+              'guest',
+              {
+                id: 'microsoft-azuread-provider',
+                title: 'Microsoft Azure',
+                message: 'Sign in with Microsoft Azure',
+                apiRef: microsoftAuthApiRef,
+              },
+            ]}
+          />
+        );
+      }
+      return (
+        <SignInPage
+          {...props}
+          auto
+          provider={{
+            id: 'microsoft-azuread-provider',
+            title: 'Microsoft Azure',
+            message: 'Sign in with Microsoft Azure',
+            apiRef: microsoftAuthApiRef,
+          }}
+        />
+      );
+    },
   },
 });
 
