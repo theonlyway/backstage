@@ -14,22 +14,38 @@ CONTEXT ?= .
 CACHE_PATH ?= $(REGISTRY)/$(REPOSITORY_OWNER)/cache
 # Full image name
 FULL_IMAGE ?= $(REGISTRY)/$(REPOSITORY_OWNER)/$(IMAGE_NAME)
-
+# CACHE_TTL defines the time-to-live for cache layers in the registry.
+# Default is 30 days. You can override this by setting CACHE_TTL (e.g., make CACHE_TTL=7d docker-build).
+CACHE_TTL ?= 90d
+# CONTAINER_TOOL defines the container tool to be used for building images.
+# Be aware that the target commands are only tested with Docker which is
+# scaffolded by default. However, you might want to replace it to use other
+# tools. (i.e. podman)
+CONTAINER_TOOL ?= docker
+# PLATFORMS defines the target platforms for the manager image be built to provide support to multiple
+# architectures. (i.e. make docker-buildx IMG=myregistry/mypoperator:0.0.1). To use this option you need to:
+# - be able to use docker buildx. More info: https://docs.docker.com/build/buildx/
+# - have enabled BuildKit. More info: https://docs.docker.com/develop/develop-images/build_enhancements/
+# - be able to push the image to your registry (i.e. if you do not set a valid value via IMG=<myregistry/image:<tag>> then the export will fail)
+# To adequately provide solutions that are compatible with multiple platforms, you should consider using this option.
+#PLATFORMS ?= linux/arm64,linux/amd64,linux/s390x,linux/ppc64le
+PLATFORMS ?= linux/arm64,linux/amd64
 .PHONY: docker-build
 ## Build the Backstage Docker image using buildx and cache
-
 docker-build:
-	docker buildx build \
-	  --cache-from=type=local,src=$(CACHE_PATH) \
-	  --cache-to=type=local,dest=$(CACHE_PATH),mode=max,ttl=720h \
-	  -t $(FULL_IMAGE):$(VERSION) \
-	  -f $(DOCKERFILE) \
-	  $(CONTEXT)
-
-.PHONY: docker-push
-## Push the Backstage Docker image to the registry
-docker-push:
-	docker push $(FULL_IMAGE):$(VERSION)
+	# copy existing Dockerfile and insert --platform=${BUILDPLATFORM} into Dockerfile.cross, and preserve the original Dockerfile
+	sed -e '1 s/\(^FROM\)/FROM --platform=\$$\{BUILDPLATFORM\}/; t' -e ' 1,// s//FROM --platform=\$$\{BUILDPLATFORM\}/' $(DOCKERFILE) > Dockerfile.cross
+	- $(CONTAINER_TOOL) buildx create --name builder
+	$(CONTAINER_TOOL) buildx use builder
+	- $(CONTAINER_TOOL) buildx build --push \
+		--platform=$(PLATFORMS) \
+		--cache-from=type=registry,ref=$(CACHE_PATH):cache \
+		--cache-to=type=registry,ref=$(CACHE_PATH):cache,mode=max,ttl=$(CACHE_TTL) \
+		--tag $(FULL_IMAGE):$(VERSION) \
+		--tag $(FULL_IMAGE):latest \
+		-f Dockerfile.cross $(CONTEXT)
+	- $(CONTAINER_TOOL) buildx rm builder
+	rm Dockerfile.cross
 
 .PHONY: help
 help: ## Show this help.

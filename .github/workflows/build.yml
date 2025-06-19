@@ -64,7 +64,6 @@ jobs:
     - name: Build and Push Docker Image using Makefile
       run: |
         make docker-build VERSION=${{ needs.semver.outputs.next_version }} REGISTRY=${{ env.GHCR_REGISTRY }} REPOSITORY_OWNER=${{ env.REPOSITORY_OWNER }} IMAGE_NAME=${{ env.IMAGE_NAME }}
-        make docker-push VERSION=${{ needs.semver.outputs.next_version }} REGISTRY=${{ env.GHCR_REGISTRY }} REPOSITORY_OWNER=${{ env.REPOSITORY_OWNER }} IMAGE_NAME=${{ env.IMAGE_NAME }}
       env:
         GHCR_REGISTRY: ${{ env.GHCR_REGISTRY }}
         REPOSITORY_OWNER: ${{ env.REPOSITORY_OWNER }}
