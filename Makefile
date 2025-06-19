@@ -7,7 +7,7 @@ REGISTRY ?= ghcr.io
 REPOSITORY_OWNER ?= $(shell echo $(USER) | tr '[:upper:]' '[:lower:]')
 IMAGE_NAME ?= backstage
 # Path to Dockerfile (adjust if needed)
-DOCKERFILE ?= packages/backend/Dockerfile
+DOCKERFILE ?= Dockerfile
 # Path to context (adjust if needed)
 CONTEXT ?= .
 # Cache path for buildx
