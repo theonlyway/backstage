@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.4] - 2025-06-20
+### :bug: Bug Fixes
+- [`af79364`](https://github.com/theonlyway/backstage/commit/af793645bedf334faa969e5eb3dd4b0c250f2f33) - added msgraph plugin *(commit by [@theonlyway](https://github.com/theonlyway))*
+
+
 ## [0.0.3] - 2025-06-19
 ### :bug: Bug Fixes
 - [`b1113d0`](https://github.com/theonlyway/backstage/commit/b1113d0c1c9bbd5a3fef05bb3bb20be873687187) - wrong platform *(commit by [@theonlyway](https://github.com/theonlyway))*
@@ -28,3 +33,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.0.1]: https://github.com/theonlyway/backstage/compare/0.0.0...0.0.1
 [0.0.2]: https://github.com/theonlyway/backstage/compare/0.0.1...0.0.2
 [0.0.3]: https://github.com/theonlyway/backstage/compare/0.0.2...0.0.3
+[0.0.4]: https://github.com/theonlyway/backstage/compare/0.0.3...0.0.4
