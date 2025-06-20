@@ -1,0 +1,19 @@
+{
+  "name": "Backstage DevContainer",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:20",
+  "features": {
+    "ghcr.io/devcontainers/features/yarn:1": {}
+  },
+  "postCreateCommand": "yarn install",
+  "customizations": {
+    "vscode": {
+      "settings": {},
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  },
+  "forwardPorts": [3000, 7007],
+  "remoteUser": "vscode"
+}
