@@ -3993,6 +3993,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@backstage/plugin-catalog-backend-module-msgraph@npm:^0.7.1":
+  version: 0.7.1
+  resolution: "@backstage/plugin-catalog-backend-module-msgraph@npm:0.7.1"
+  dependencies:
+    "@azure/identity": "npm:^4.0.0"
+    "@backstage/backend-plugin-api": "npm:^1.4.0"
+    "@backstage/catalog-model": "npm:^1.7.4"
+    "@backstage/config": "npm:^1.3.2"
+    "@backstage/plugin-catalog-common": "npm:^1.1.4"
+    "@backstage/plugin-catalog-node": "npm:^1.17.1"
+    "@microsoft/microsoft-graph-types": "npm:^2.6.0"
+    lodash: "npm:^4.17.21"
+    p-limit: "npm:^3.0.2"
+    qs: "npm:^6.9.4"
+    uuid: "npm:^11.0.0"
+  checksum: 10c0/786c65e1194f29485d5a0211b42fbb5cb541172d33d7cde33906d4bda836f71ffdf242d103563bc6e55319928ce06eb62d51b8b07da8a444129df9c88a6c83ee
+  languageName: node
+  linkType: hard
+
 "@backstage/plugin-catalog-backend-module-scaffolder-entity-model@npm:^0.2.9":
   version: 0.2.9
   resolution: "@backstage/plugin-catalog-backend-module-scaffolder-entity-model@npm:0.2.9"
@@ -7864,6 +7883,13 @@ __metadata:
   version: 2.0.1
   resolution: "@microsoft/fetch-event-source@npm:2.0.1"
   checksum: 10c0/38c69e9b9990e6cee715c7bbfa2752f943b42575acadb36facf19bb831f1520c469f854277439154258e0e1dc8650cc85038230d1f451e3f6b62e8faeaa1126c
+  languageName: node
+  linkType: hard
+
+"@microsoft/microsoft-graph-types@npm:^2.6.0":
+  version: 2.40.0
+  resolution: "@microsoft/microsoft-graph-types@npm:2.40.0"
+  checksum: 10c0/c6f69a0fe136579d735efafc1375e4540e01d34ea488d987a9b651f7206c40c76991fff56df31e8b2593f16846bd748d0ffcf249d1f2629bb0298e6214fe2fdc
   languageName: node
   linkType: hard
 
@@ -16322,6 +16348,7 @@ __metadata:
     "@backstage/plugin-auth-node": "npm:^0.6.4"
     "@backstage/plugin-catalog-backend": "npm:^2.1.0"
     "@backstage/plugin-catalog-backend-module-logs": "npm:^0.1.11"
+    "@backstage/plugin-catalog-backend-module-msgraph": "npm:^0.7.1"
     "@backstage/plugin-catalog-backend-module-scaffolder-entity-model": "npm:^0.2.9"
     "@backstage/plugin-kubernetes-backend": "npm:^0.19.7"
     "@backstage/plugin-permission-backend": "npm:^0.7.1"
