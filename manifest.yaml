@@ -1,0 +1,191 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name:
+---
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/basic-auth
+metadata:
+  name: app-secret
+  namespace: backstage
+data:
+  username: YXBw
+  password: cGFzc3dvcmQ=
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backstage-app-config
+  namespace: backstage
+data:
+  app-config.cm.yaml: |
+
+    organization:
+      name: Backstage Demo
+
+    app:
+      title: Backstage Demo
+      baseUrl: ${BASE_URL}
+
+    backend:
+      baseUrl: ${BASE_URL}
+      listen: ':7007'
+
+      database:
+        client: pg
+        connection:
+          host: ${POSTGRES_HOST}
+          port: ${POSTGRES_PORT}
+          user: ${POSTGRES_USER}
+          password: ${POSTGRES_PASSWORD}
+
+    integrations: {}
+
+    auth:
+      environment: development
+      # see https://backstage.io/docs/auth/ to learn about auth providers
+      providers:
+        # See https://backstage.io/docs/auth/guest/provider
+        guest: {}
+
+    scaffolder:
+
+    techdocs:
+      builder: 'local'
+      generator:
+        runIn: 'local'
+      publisher:
+        type: 'local'
+
+    scorecards:
+      test: none
+
+    catalog:
+      locations:
+      - type: file
+        target: ./demo-catalog/acme-corp.yaml
+        rules:
+        - allow: [Component, System, API, Resource, Location]
+      - type: file
+        target: ./demo-catalog/all.yaml
+        rules:
+        - allow: [Group, Location, User]
+
+    kubernetes:
+      serviceLocatorMethod:
+        type: 'multiTenant'
+      clusterLocatorMethods:
+        - type: 'config'
+          clusters:
+            - url: kubernetes.default.svc.cluster.local:443
+              name: local
+              authProvider: 'serviceAccount'
+              skipTLSVerify: false
+              skipMetricsLookup: true
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backstage-config
+  namespace: backstage
+data:
+  POSTGRES_PORT: "5432"
+  POSTGRES_HOST: postgres-rw
+  DEMO_CATALOG_LOCATION: https://github.com/PlatformersCommunity/backstage-helm-chart/blob/main/demo-catalog/all.yaml
+  CUSTOM_CATALOG_LOCATION: None
+  BASE_URL: http://localhost:7007
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: backstage-cluster-ro
+subjects:
+  - namespace: backstage
+    kind: ServiceAccount
+    name: backstage-service-account
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:aggregate-to-view
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backstage
+  namespace: backstage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: backstage
+      app.kubernetes.io/instance: backstage
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: backstage
+        app.kubernetes.io/instance: backstage
+        azure.workload.identity/use: "true"
+    spec:
+      containers:
+        - name: backstage
+          image: "ghcr.io/theonlyway/backstage:0.0.8"
+          imagePullPolicy: IfNotPresent
+          command: ["node"]
+          args: ["packages/backend", "--config", "app-config.cm.yaml"]
+          ports:
+            - name: http
+              containerPort: 7007
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          envFrom:
+            - secretRef:
+                name: backstage-secrets
+            - configMapRef:
+                name: backstage-config
+          volumeMounts:
+            - name: app-config
+              mountPath: /app/app-config.cm.yaml
+              subPath: app-config.cm.yaml
+      serviceAccountName: backstage-service-account
+      volumes:
+        - name: app-config
+          configMap:
+            name: backstage-app-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backstage
+  namespace: backstage
+spec:
+  type: ClusterIP
+  ports:
+    - port: 7007
+      targetPort: 7007
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: backstage
+    app.kubernetes.io/instance: backstage
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: backstage-service-account
+  namespace: backstage
+  annotations:
