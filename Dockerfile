@@ -90,7 +90,8 @@ COPY --chown=node:node examples ./examples
 COPY --chown=node:node demo-catalog ./demo-catalog
 
 # This switches many Node.js dependencies to production mode.
-ENV NODE_ENV=production
+# ENV NODE_ENV=production
+ENV NODE_ENV=development
 
 # This disables node snapshot for Node 20 to work with the Scaffolder
 ENV NODE_OPTIONS="--no-node-snapshot"
