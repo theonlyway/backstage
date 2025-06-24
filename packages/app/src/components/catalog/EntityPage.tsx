@@ -161,7 +161,7 @@ const serviceEntityPage = (
     <EntityLayout.Route
       path="/kubernetes"
       title="Kubernetes"
-      if={isKubernetesAvailable}
+      //if={isKubernetesAvailable}
     >
       <EntityKubernetesContent />
     </EntityLayout.Route>
