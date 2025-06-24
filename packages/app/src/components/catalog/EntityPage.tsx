@@ -58,7 +58,12 @@ import {
   isKubernetesAvailable,
 } from '@backstage/plugin-kubernetes';
 
-import { EntityFluxHelmReleasesCard } from '@weaveworksoss/backstage-plugin-flux';
+import {
+  EntityFluxHelmReleasesCard,
+  EntityFluxGitRepositoriesCard,
+  EntityFluxOCIRepositoriesCard,
+  EntityFluxHelmRepositoriesCard
+ } from '@weaveworksoss/backstage-plugin-flux';
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -165,6 +170,21 @@ const serviceEntityPage = (
     >
       <EntityKubernetesContent />
     </EntityLayout.Route>
+
+    <Grid container spacing={3} alignItems="stretch">
+      <Grid item md={12}>
+        <EntityFluxHelmReleasesCard />
+      </Grid>
+      <Grid item md={12}>
+        <EntityFluxHelmRepositoriesCard />
+      </Grid>
+      <Grid item md={12}>
+        <EntityFluxGitRepositoriesCard />
+      </Grid>
+      <Grid item md={12}>
+        <EntityFluxOCIRepositoriesCard />
+      </Grid>
+    </Grid>
 
     <EntityLayout.Route path="/api" title="API">
       <Grid container spacing={3} alignItems="stretch">
