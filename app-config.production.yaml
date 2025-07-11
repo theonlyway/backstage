@@ -53,3 +53,18 @@ catalog:
       target: ./examples/org.yaml
       rules:
         - allow: [User, Group]
+kubernetes:
+  frontend:
+    podDelete:
+      enabled: false
+  serviceLocatorMethod:
+    type: 'multiTenant'
+  clusterLocatorMethods:
+    - type: 'config'
+      clusters:
+        - url: https://kubernetes.default.svc
+          name: local
+          title: 'Local AKS cluster'
+          authProvider: 'aks'
+          skipTLSVerify: true
+          skipMetricsLookup: true
