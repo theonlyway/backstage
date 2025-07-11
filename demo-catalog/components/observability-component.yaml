@@ -1,0 +1,38 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: observability
+  description: Components a belonging to the oberservability stack
+  tags:
+    - prometheus
+    - grafana
+    - oberservability
+  links:
+    - url: https://example.com/user
+      title: Examples Users
+      icon: user
+    - url: https://example.com/group
+      title: Example Group
+      icon: group
+    - url: https://example.com/cloud
+      title: Link with Cloud Icon
+      icon: cloud
+    - url: https://example.com/dashboard
+      title: Dashboard
+      icon: dashboard
+    - url: https://example.com/help
+      title: Support
+      icon: help
+    - url: https://example.com/web
+      title: Website
+      icon: web
+    - url: https://example.com/alert
+      title: Alerts
+      icon: alert
+  annotations:
+    backstage.io/kubernetes-id: observability
+spec:
+  type: service
+  lifecycle: production
+  owner: team-a
+  system: oberservability-stack
