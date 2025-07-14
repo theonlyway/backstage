@@ -32,7 +32,6 @@ metadata:
   annotations:
     backstage.io/kubernetes-id: observability
     backstage.io/kubernetes-namespace: prometheus-system
-    backstage.io/kubernetes-cluster: local
 spec:
   type: service
   lifecycle: production
