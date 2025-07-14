@@ -70,7 +70,13 @@ const app = createApp({
             {...props}
             auto
             providers={[
-              'guest'
+              'guest',
+              {
+                id: 'microsoft-azuread-provider',
+                title: 'Microsoft Azure',
+                message: 'Sign in with Microsoft Azure',
+                apiRef: microsoftAuthApiRef,
+              }
             ]}
           />
         );

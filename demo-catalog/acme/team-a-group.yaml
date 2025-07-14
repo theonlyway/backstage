@@ -51,7 +51,7 @@ kind: User
 metadata:
   name: guest
 spec:
-  memberOf: [guests, team-a, team-b, team-c]
+  memberOf: [guests, team-a, team-b, team-c, devops]
 ---
 # https://backstage.io/docs/features/software-catalog/descriptor-format#kind-group
 apiVersion: backstage.io/v1alpha1

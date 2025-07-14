@@ -2,7 +2,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: observability
-  description: Components a belonging to the oberservability stack
+  description: Components a belonging to the oberservability system
   tags:
     - prometheus
     - grafana
@@ -35,4 +35,4 @@ spec:
   type: service
   lifecycle: production
   owner: team-a
-  system: oberservability-stack
+  system: oberservability-system
