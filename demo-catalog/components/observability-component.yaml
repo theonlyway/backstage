@@ -34,5 +34,5 @@ metadata:
 spec:
   type: service
   lifecycle: production
-  owner: team-a
-  system: oberservability-system
+  owner: devops
+  system: observability

@@ -2,7 +2,7 @@ apiVersion: backstage.io/v1alpha1
 kind: System
 metadata:
   name: observability
-  description: Audio playback system
+  description: Observability system for monitoring
 spec:
   owner: devops
-  domain: playback
+  domain: observability
