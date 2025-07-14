@@ -31,6 +31,7 @@ metadata:
       icon: alert
   annotations:
     backstage.io/kubernetes-id: observability
+    backstage.io/kubernetes-namespace: prometheus-system
 spec:
   type: service
   lifecycle: production
