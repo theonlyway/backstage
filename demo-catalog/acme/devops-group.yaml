@@ -11,3 +11,13 @@ spec:
     picture: https://api.dicebear.com/7.x/identicon/svg?seed=Fluffy&backgroundType=solid,gradientLinear&backgroundColor=ffd5dc,b6e3f4
   parent: backstage
   children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: anthony.waye
+spec:
+  profile:
+    displayName: Anthony Waye
+    email: anthony.waye@riotinto.com
+  memberOf: [guests, team-a, team-b, team-c, devops]
