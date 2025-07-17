@@ -5,12 +5,13 @@
  *
  * Happy hacking!
  */
-
-import { createBackend } from '@backstage/backend-defaults';
 import 'global-agent/bootstrap';
 import { setGlobalDispatcher, EnvHttpProxyAgent } from 'undici';
 
 setGlobalDispatcher(new EnvHttpProxyAgent());
+
+import { createBackend } from '@backstage/backend-defaults';
+
 const backend = createBackend();
 
 backend.add(import('@backstage/plugin-app-backend'));
