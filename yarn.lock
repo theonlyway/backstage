@@ -14339,6 +14339,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/global-agent@npm:^3":
+  version: 3.0.0
+  resolution: "@types/global-agent@npm:3.0.0"
+  checksum: 10c0/b2fdcb13b8b7079e1ae9fbab52ca1fe7551d7fbff6be40a30a2f3c9d2b2d1841829e62249464ecf5e7240bfece8bce143a3331449af714f8c97a08b581bbc18a
+  languageName: node
+  linkType: hard
+
 "@types/graceful-fs@npm:^4.1.3":
   version: 4.1.9
   resolution: "@types/graceful-fs@npm:4.1.9"
@@ -16551,10 +16558,13 @@ __metadata:
     "@backstage/plugin-search-backend-module-techdocs": "npm:^0.4.3"
     "@backstage/plugin-search-backend-node": "npm:^1.3.12"
     "@backstage/plugin-techdocs-backend": "npm:^2.0.3"
+    "@types/global-agent": "npm:^3"
     app: "link:../app"
     better-sqlite3: "npm:^9.0.0"
+    global-agent: "npm:^3.0.0"
     node-gyp: "npm:^10.0.0"
     pg: "npm:^8.11.3"
+    undici: "npm:^7.11.0"
   languageName: unknown
   linkType: soft
 
@@ -33356,6 +33366,13 @@ __metadata:
   version: 7.8.0
   resolution: "undici-types@npm:7.8.0"
   checksum: 10c0/9d9d246d1dc32f318d46116efe3cfca5a72d4f16828febc1918d94e58f6ffcf39c158aa28bf5b4fc52f410446bc7858f35151367bd7a49f21746cab6497b709b
+  languageName: node
+  linkType: hard
+
+"undici@npm:^7.11.0":
+  version: 7.11.0
+  resolution: "undici@npm:7.11.0"
+  checksum: 10c0/e5dd3cc2acae9c8333f97a78d4e91108957367fa7e69918e3a5cbd84702cb453cf7de3f8c2a33bcf808850d78ead70f3bd62900a70d969912e9fed8842bbfc11
   languageName: node
   linkType: hard
 
