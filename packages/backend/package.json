@@ -44,6 +44,7 @@
     "@backstage/plugin-search-backend-module-techdocs": "^0.4.3",
     "@backstage/plugin-search-backend-node": "^1.3.12",
     "@backstage/plugin-techdocs-backend": "^2.0.3",
+    "@parfuemerie-douglas/scaffolder-backend-module-azure-repositories": "^0.3.0",
     "app": "link:../app",
     "global-agent": "^3.0.0",
     "node-gyp": "^10.0.0",
