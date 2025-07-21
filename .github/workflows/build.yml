@@ -79,6 +79,35 @@ jobs:
         IMAGE_NAME: ${{ env.IMAGE_NAME }}
         VERSION: ${{ needs.semver.outputs.next_version }}
 
+  build-ghcr-debug:
+    needs: [semver]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set Environment Variables
+      run: echo "REPOSITORY_OWNER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+    - name: Login to GHCR
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.GHCR_REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ github.token }}
+
+    - name: Build and Push Debug Docker Image using Makefile
+      run: |
+        make docker-build-debug VERSION=${{ needs.semver.outputs.next_version }} REGISTRY=${{ env.GHCR_REGISTRY }} REPOSITORY_OWNER=${{ env.REPOSITORY_OWNER }} IMAGE_NAME=${{ env.IMAGE_NAME }}
+      env:
+        GHCR_REGISTRY: ${{ env.GHCR_REGISTRY }}
+        REPOSITORY_OWNER: ${{ env.REPOSITORY_OWNER }}
+        IMAGE_NAME: ${{ env.IMAGE_NAME }}
+        VERSION: ${{ needs.semver.outputs.next_version }}
+
   release:
     needs: [semver, build-ghcr]
     runs-on: ubuntu-latest
