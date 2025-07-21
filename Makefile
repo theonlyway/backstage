@@ -57,8 +57,8 @@ docker-build-debug:
 	$(CONTAINER_TOOL) buildx use builder
 	$(CONTAINER_TOOL) buildx build --push \
 		--platform=$(PLATFORMS) \
-		--cache-from=type=registry,ref=$(CACHE_PATH):cache \
-		--cache-to=type=registry,ref=$(CACHE_PATH):cache,mode=max,ttl=$(CACHE_TTL) \
+		--cache-from=type=registry,ref=$(CACHE_PATH):cache-debug \
+		--cache-to=type=registry,ref=$(CACHE_PATH):cache-debug,mode=max,ttl=$(CACHE_TTL) \
 		--tag $(FULL_IMAGE):$(VERSION)-debug \
 		--tag $(FULL_IMAGE):latest-debug \
 		-f Dockerfile.cross $(CONTEXT)
