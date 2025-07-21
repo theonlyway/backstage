@@ -8,6 +8,7 @@ REPOSITORY_OWNER ?= $(shell echo $(USER) | tr '[:upper:]' '[:lower:]')
 IMAGE_NAME ?= backstage
 # Path to Dockerfile (adjust if needed)
 DOCKERFILE ?= Dockerfile
+DEBUG_DOCKERFILE ?= Dockerfile.debug
 # Path to context (adjust if needed)
 CONTEXT ?= .
 # Full image name
@@ -43,6 +44,23 @@ docker-build:
 		--cache-to=type=registry,ref=$(CACHE_PATH):cache,mode=max,ttl=$(CACHE_TTL) \
 		--tag $(FULL_IMAGE):$(VERSION) \
 		--tag $(FULL_IMAGE):latest \
+		-f Dockerfile.cross $(CONTEXT)
+	- $(CONTAINER_TOOL) buildx rm builder
+	rm Dockerfile.cross
+
+.PHONY: docker-build-debug
+## Build the debug Backstage Docker image using buildx and cache
+docker-build-debug:
+	# copy existing Dockerfile and insert --platform=${BUILDPLATFORM} into Dockerfile.cross, and preserve the original Dockerfile
+	sed -e '1 s/\(^FROM\)/FROM --platform=\$$\{BUILDPLATFORM\}/; t' -e ' 1,// s//FROM --platform=\$$\{BUILDPLATFORM\}/' $(DEBUG_DOCKERFILE) > Dockerfile.cross
+	- $(CONTAINER_TOOL) buildx create --name builder
+	$(CONTAINER_TOOL) buildx use builder
+	$(CONTAINER_TOOL) buildx build --push \
+		--platform=$(PLATFORMS) \
+		--cache-from=type=registry,ref=$(CACHE_PATH):cache \
+		--cache-to=type=registry,ref=$(CACHE_PATH):cache,mode=max,ttl=$(CACHE_TTL) \
+		--tag $(FULL_IMAGE):$(VERSION)-debug \
+		--tag $(FULL_IMAGE):latest-debug \
 		-f Dockerfile.cross $(CONTEXT)
 	- $(CONTAINER_TOOL) buildx rm builder
 	rm Dockerfile.cross
