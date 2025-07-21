@@ -213,10 +213,6 @@ const serviceEntityPage = (
     <EntityLayout.Route path="/docs" title="Docs">
       {techdocsContent}
     </EntityLayout.Route>
-
-    <EntityLayout.Route if={isKubernetesAvailable} path="/kubernetes" title="Kubernetes">
-      <EntityKubernetesContent refreshIntervalMs={30000} />
-    </EntityLayout.Route>
   </EntityLayout>
 );
 
