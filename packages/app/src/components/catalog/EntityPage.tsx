@@ -65,6 +65,22 @@ import {
   EntityFluxHelmRepositoriesCard
  } from '@weaveworksoss/backstage-plugin-flux';
 
+import {
+  EntityAzurePipelinesContent,
+  isAzureDevOpsAvailable,
+  EntityAzurePullRequestsContent,
+  EntityAzureGitTagsContent,
+  EntityAzureReadmeCard
+} from '@backstage-community/plugin-azure-devops';
+
+import { 
+  AzureResourceEntityOverviewCard, 
+  AZURE_ANNOTATION_TAG_SELECTOR, 
+  EntityAzureSecurityOverviewCard,
+  EntityAzureCostAdviceOverviewCard, 
+  isAzureResourceEnabled 
+} from '@vippsno/plugin-azure-resources';
+
 const techdocsContent = (
   <EntityTechdocsContent>
     <TechDocsAddons>
@@ -72,6 +88,30 @@ const techdocsContent = (
     </TechDocsAddons>
   </EntityTechdocsContent>
 );
+
+const azureResourceContent = (
+  <EntitySwitch>
+    <EntitySwitch.Case if={isAzureResourceEnabled}>
+    <Grid container spacing={3} alignItems="stretch">
+      <Grid item md={6}>
+        <AzureResourceEntityOverviewCard />
+      </Grid>
+      <Grid item md={6}>
+        <EntityAzureSecurityOverviewCard />
+      </Grid>
+      <Grid item md={6}>
+        <EntityAzureCostAdviceOverviewCard />
+      </Grid>
+    </Grid>
+    </EntitySwitch.Case>
+    <EntitySwitch.Case>
+      <>
+        <MissingAnnotationEmptyState annotation={AZURE_ANNOTATION_TAG_SELECTOR} />
+      </>
+    </EntitySwitch.Case>
+  </EntitySwitch>
+);
+
 
 const cicdContent = (
   // This is an example of how you can implement your company's logic in entity page.
@@ -99,6 +139,9 @@ const cicdContent = (
           </Button>
         }
       />
+    </EntitySwitch.Case>
+    <EntitySwitch.Case if={isAzureDevOpsAvailable}>
+        <EntityAzurePipelinesContent defaultLimit={25} />
     </EntitySwitch.Case>
   </EntitySwitch>
 );
@@ -150,6 +193,16 @@ const overviewContent = (
     <Grid item md={4} xs={12}>
       <EntityFluxHelmReleasesCard />
     </Grid>
+    <EntitySwitch>
+      <EntitySwitch.Case if={isAzureDevOpsAvailable}>
+        <Grid item md={6}>
+          ...
+        </Grid>
+        <Grid item md={6}>
+          <EntityAzureReadmeCard maxHeight={350} />
+        </Grid>
+      </EntitySwitch.Case>
+    </EntitySwitch>
   </Grid>
 );
 
@@ -186,6 +239,18 @@ const serviceEntityPage = (
           <EntityFluxOCIRepositoriesCard />
         </Grid>
       </Grid>
+    </EntityLayout.Route>
+
+    <EntityLayout.Route if={isAzureDevOpsAvailable} path="/pull-requests" title="Pull Requests">
+      <EntityAzurePullRequestsContent defaultLimit={25} />
+    </EntityLayout.Route>
+
+    <EntityLayout.Route if={isAzureDevOpsAvailable} path="/git-tags" title="Git Tags">
+      <EntityAzureGitTagsContent />
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/azure" title="Azure">
+      {azureResourceContent}
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/api" title="API">

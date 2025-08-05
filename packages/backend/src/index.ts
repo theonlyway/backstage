@@ -19,6 +19,7 @@ backend.add(import('@backstage/plugin-proxy-backend'));
 backend.add(import('@backstage/plugin-scaffolder-backend'));
 backend.add(import('@backstage/plugin-scaffolder-backend-module-github'));
 backend.add(import('@backstage/plugin-scaffolder-backend-module-azure'));
+backend.add(import('@backstage-community/plugin-scaffolder-backend-module-azure-devops'));
 backend.add(import('@parfuemerie-douglas/scaffolder-backend-module-azure-repositories'));
 backend.add(import('@backstage/plugin-techdocs-backend'));
 
