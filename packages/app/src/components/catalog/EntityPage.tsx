@@ -80,6 +80,7 @@ import {
   EntityAzureCostAdviceOverviewCard, 
   isAzureResourceEnabled 
 } from '@vippsno/plugin-azure-resources';
+import { MissingAnnotationEmptyState } from '@backstage/plugin-catalog-react';
 
 const techdocsContent = (
   <EntityTechdocsContent>
