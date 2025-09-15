@@ -3,6 +3,8 @@ kind: Component
 metadata:
   name: backstage
   description: An example of a Backstage application.
+  annotations:
+    scorecard/jsonDataUrl: 'https://github.com/oriflame/backstage-plugins/blob/master/results.json'
   # Example for optional annotations
   # annotations:
   #   github.com/project-slug: backstage/backstage
