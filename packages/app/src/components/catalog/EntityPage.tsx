@@ -81,6 +81,8 @@ import {
   isAzureResourceEnabled 
 } from '@vippsno/plugin-azure-resources';
 import { MissingAnnotationEmptyState } from '@backstage/plugin-catalog-react';
+import { EntityScoreCardContent } from '@oriflame/backstage-plugin-score-card';
+import { EntityScoreCardTable } from '@oriflame/backstage-plugin-score-card';
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -467,6 +469,23 @@ const systemPage = (
         unidirectional={false}
       />
     </EntityLayout.Route>
+
+    <EntityLayout.Route path="/score" title="Score">
+      <Grid container spacing={3} alignItems="stretch">
+        <Grid item xs={12}>
+          <EntityScoreCardContent />
+        </Grid>
+      </Grid>
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/score" title="Score">
+      <Grid container spacing={3} alignItems="stretch">
+        <Grid item xs={12}>
+          <EntityScoreCardTable />
+        </Grid>
+      </Grid>
+    </EntityLayout.Route>
+
   </EntityLayout>
 );
 

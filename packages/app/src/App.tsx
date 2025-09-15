@@ -41,6 +41,7 @@ import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 import { FluxRuntimePage } from '@weaveworksoss/backstage-plugin-flux';
+import { ScoreBoardPage } from '@oriflame/backstage-plugin-score-card';
 
 const app = createApp({
   apis,
@@ -132,6 +133,7 @@ const routes = (
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
     <Route path="/flux-runtime" element={<FluxRuntimePage />} />
+    <Route path="/score-board" element={<ScoreBoardPage />} />    
   </FlatRoutes>
 );
 
