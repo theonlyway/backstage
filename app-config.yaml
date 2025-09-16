@@ -117,4 +117,4 @@ permission:
   enabled: true
 
 scorecards:
-  jsonDataUrl: https://dev.azure.com/IST-PandSD/backstage/_git/sample-scorecard-data
+  jsonDataUrl: https://raw.githubusercontent.com/Oriflame/backstage-plugins/main/plugins/score-card/sample-data/
