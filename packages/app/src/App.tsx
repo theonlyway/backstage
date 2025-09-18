@@ -43,6 +43,8 @@ import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/
 import { FluxRuntimePage } from '@weaveworksoss/backstage-plugin-flux';
 import { ScoreBoardPage } from '@oriflame/backstage-plugin-score-card';
 import { OpenCostPage } from '@backstage-community/plugin-opencost';
+import { MaturityPage } from '@backstage-community/plugin-tech-insights-maturity';
+import { TechInsightsScorecardPage } from '@backstage-community/plugin-tech-insights';
 
 const app = createApp({
   apis,
@@ -136,6 +138,8 @@ const routes = (
     <Route path="/flux-runtime" element={<FluxRuntimePage />} />
     <Route path="/score-board" element={<ScoreBoardPage />} />
     <Route path="/opencost" element={<OpenCostPage />} />    
+    <Route path="/maturity" element={<MaturityPage />} />
+    <Route path="/tech-insights" element={<TechInsightsScorecardPage />} />
   </FlatRoutes>
 );
 

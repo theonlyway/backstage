@@ -83,6 +83,11 @@ import {
 import { MissingAnnotationEmptyState } from '@backstage/plugin-catalog-react';
 import { EntityScoreCardContent } from '@oriflame/backstage-plugin-score-card';
 import { EntityScoreCardTable } from '@oriflame/backstage-plugin-score-card';
+import { EntityMaturitySummaryCard } from '@backstage-community/plugin-tech-insights-maturity';
+import { EntityMaturityScorecardContent } from '@backstage-community/plugin-tech-insights-maturity';
+import { EntityMaturitySummaryContent } from '@backstage-community/plugin-tech-insights-maturity';
+import { EntityTechInsightsScorecardContent } from '@backstage-community/plugin-tech-insights';
+import { EntityTechInsightsScorecardCard } from '@backstage-community/plugin-tech-insights';
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -196,6 +201,23 @@ const overviewContent = (
     <Grid item md={4} xs={12}>
       <EntityFluxHelmReleasesCard />
     </Grid>
+    <Grid item md={3} xs={6}>
+      <EntityMaturitySummaryCard />
+    </Grid>
+    <Grid item md={8} xs={12}>
+      <EntityTechInsightsScorecardCard
+        title="Customized title for the scorecard"
+        description="Small description about scorecards"
+        checksId={['simpleTestCheck']}
+      />
+    </Grid>
+    <Grid item md={4}>
+      <EntityTechInsightsScorecardCard
+        title="Customized title for the scorecard"
+        description="Small description about scorecards"
+        gauge
+      />
+    </Grid>
     <EntitySwitch>
       <EntitySwitch.Case if={isAzureDevOpsAvailable}>
         <Grid item md={6}>
@@ -280,6 +302,13 @@ const serviceEntityPage = (
 
     <EntityLayout.Route path="/docs" title="Docs">
       {techdocsContent}
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/tech-insights" title="Scorecards">
+      <EntityTechInsightsScorecardContent
+        title="Customized title for the scorecard"
+        description="Small description about scorecards"
+      />
     </EntityLayout.Route>
   </EntityLayout>
 );
@@ -484,6 +513,14 @@ const systemPage = (
           <EntityScoreCardTable />
         </Grid>
       </Grid>
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/maturity" title="Maturity">
+      <EntityMaturityScorecardContent />
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/maturity" title="Maturity">
+      <EntityMaturitySummaryContent />
     </EntityLayout.Route>
 
   </EntityLayout>

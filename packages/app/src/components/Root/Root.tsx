@@ -30,6 +30,7 @@ import GroupIcon from '@material-ui/icons/People';
 import { FluxIcon } from '@weaveworksoss/backstage-plugin-flux';
 import Score from '@material-ui/icons/Score';
 import MoneyIcon from '@material-ui/icons/MonetizationOn';
+import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects';
 
 const useSidebarLogoStyles = makeStyles({
   root: {
@@ -84,7 +85,9 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
           {/* Items in this group will be scrollable if they run out of space */}
           <SidebarItem icon={FluxIcon} to="flux-runtime" text="Flux Runtime" />
           <SidebarItem icon={Score} to="score-board" text="Score board" />
-          <SidebarItem icon={MoneyIcon} to="opencost" text="OpenCost" />          
+          <SidebarItem icon={MoneyIcon} to="opencost" text="OpenCost" />
+          <SidebarItem icon={EmojiObjectsIcon} to="maturity" text="Maturity" />
+          <SidebarItem icon={EmojiObjectsIcon} to="tech-insights" text="Tech insights" />
         </SidebarScrollWrapper>
       </SidebarGroup>
       <SidebarSpace />

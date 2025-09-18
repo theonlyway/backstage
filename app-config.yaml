@@ -119,3 +119,45 @@ permission:
 
 scorecards:
   jsonDataUrl: https://raw.githubusercontent.com/Oriflame/backstage-plugins/main/plugins/score-card/sample-data/
+
+# tech insights fact retrievers
+techInsights:
+  factRetrievers:
+    entityMetadataFactRetriever:
+      # how often the fact retriever should run
+      cadence: '*/15 * * * *'
+      # how long to keep the fact data
+      lifecycle: { timeToLive: { weeks: 2 } }
+    entityOwnershipFactRetriever:
+      cadence: '*/15 * * * *'
+      lifecycle: { timeToLive: { weeks: 2 } }
+    techdocsFactRetriever:
+      cadence: '*/15 * * * *'
+      lifecycle: { timeToLive: { weeks: 2 } }
+# # Lifecycle configuration examples
+# lifecycle: { timeToLive: { weeks: 2 } }
+# 
+# # Deletes all but 7 latest facts for each id/entity pair
+# lifecycle: { maxItems: 7 };
+# 
+# # Deletes all facts older than 2 weeks (TTL)
+# lifecycle: { timeToLive: 1209600000 } # Luxon duration like object
+# lifecycle: { timeToLive: { weeks: 2 } }; # Human readable value
+  factChecker:
+    checks:
+      groupOwnerCheck:
+        type: json-rules-engine
+        name: Group Owner Check
+        description: Verifies that a group has been set as the spec.owner for this entity
+        factIds:
+          - entityOwnershipFactRetriever
+        rule:
+          conditions:
+            all:
+              - fact: hasGroupOwner
+                operator: equal
+                value: true
+        metadata:
+          category: 'Ownership',
+          rank: 1, # rank values: Bronze - 1, Silver - 2, Gold - 3
+          solution: 'Add a group owner to spec.owner field in the factbook',
