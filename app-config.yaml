@@ -158,6 +158,6 @@ techInsights:
                 operator: equal
                 value: true
         metadata:
-          category: 'Ownership',
+          category: 'Ownership'
           rank: 1, # rank values: Bronze - 1, Silver - 2, Gold - 3
-          solution: 'Add a group owner to spec.owner field in the factbook',
+          solution: 'Add a group owner to spec.owner field in the factbook'
